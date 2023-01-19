@@ -13,6 +13,8 @@ import com.carapi.carapi.dto.CarDTO;
 import com.carapi.carapi.model.Car;
 import com.carapi.carapi.repository.CarRepository;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/api/car")
 public class CarController {
@@ -26,7 +28,7 @@ public class CarController {
   }
 
   @PostMapping
-  public void create(@RequestBody CarDTO req) {
+  public void create(@RequestBody @Valid CarDTO req) {
     repository.save(new Car(req));
   }
 
