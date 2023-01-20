@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.carapi.carapi.dto.CarDTO;
 import com.carapi.carapi.model.Car;
-import com.carapi.carapi.repository.CarRepository;
+import com.carapi.carapi.service.CarService;
 
 import jakarta.validation.Valid;
 
@@ -23,33 +23,26 @@ import jakarta.validation.Valid;
 public class CarController {
   
   @Autowired
-  private CarRepository repository;
+  private CarService service;
 
   @GetMapping
   public List<Car> listAll() {
-    return repository.findAll();
+    return service.findAll();
   }
 
   @PostMapping
   public void create(@RequestBody @Valid CarDTO req) {
-    repository.save(new Car(req));
+    service.save(req);
   }
 
   @PutMapping("/{id}")
   public void update(@PathVariable Long id, @RequestBody @Valid CarDTO req) {
-    repository.findById(id).map(car -> {
-      car.setAnoModelo(req.anoModelo());
-      car.setDataFabricacao(req.dataFabricacao());
-      car.setFabricante(req.fabricante());
-      car.setModelo(req.modelo());
-      car.setValor(req.valor());
-      return repository.save(car);
-    });
+    service.findById(id, req);
   }
 
   @DeleteMapping("/{id}")
   public void delete(@PathVariable Long id) {
-    repository.deleteById(id);
+    service.deleteById(id);
   }
 
 }
